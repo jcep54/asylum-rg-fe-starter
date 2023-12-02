@@ -98,8 +98,8 @@ function RenderLandingPage(props) {
             <h2>Systematic Disparity Insights</h2>
           </div>
 
-          <div className="insight-continer">
-            <div className="insight info">
+          <div className="insight-container">
+            <div className="insight-info">
               <h2>36%</h2>
               <p>
                 By the end of the Trump administration, the average asylum
@@ -108,7 +108,7 @@ function RenderLandingPage(props) {
               </p>
             </div>
 
-            <div className="insight info">
+            <div className="insight-info">
               <h2>5%</h2>
               <p>
                 The New York asylum office grant rate dropped to 5 percent in
@@ -116,7 +116,7 @@ function RenderLandingPage(props) {
               </p>
             </div>
 
-            <div className="insight info">
+            <div className="insight-info">
               <h2>6x Lower</h2>
               <p>
                 Between fiscal year 2017 and 2020, the New York asylum office’s
@@ -124,6 +124,14 @@ function RenderLandingPage(props) {
                 asylum office.
               </p>
             </div>
+          </div>
+          <div className="read-more-btn">
+            <Button
+              type="default"
+              style={{ backgroundColor: '#404C4A', color: '#FFFFFF' }}
+            >
+              Read More
+            </Button>
           </div>
         </div>
         <p onClick={() => scrollToTop()} className="back-to-top">
