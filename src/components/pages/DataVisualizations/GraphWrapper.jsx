@@ -10,7 +10,7 @@ import YearLimitsSelect from './YearLimitsSelect';
 import ViewSelect from './ViewSelect';
 import axios from 'axios';
 import { resetVisualizationQuery } from '../../../state/actionCreators';
-import test_data from '../../../data/test_data.json';
+// import test_data from '../../../data/test_data.json';
 import { colors } from '../../../styles/data_vis_colors';
 import ScrollToTopOnMount from '../../../utils/scrollToTopOnMount';
 
@@ -51,7 +51,12 @@ function GraphWrapper(props) {
         break;
     }
   }
-  function updateStateWithNewData(years, view, office, stateSettingCallback) {
+  async function updateStateWithNewData(
+    years,
+    view,
+    office,
+    stateSettingCallback
+  ) {
     /*
           _                                                                             _
         |                                                                                 |
@@ -73,34 +78,34 @@ function GraphWrapper(props) {
                                    -- Mack 
     
     */
+    async function fetchData() {
+      try {
+        const [fisData, citData] = await Promise.all([
+          axios.get(`${api_URL}/fiscalSummary`),
+          axios.get(`${api_URL}/citizenshipSummary`),
+        ]);
+        const combinedData = {
+          yearResults: fisData.data.yearResults,
+          citizenshipResults: citData.data,
+        };
+        return combinedData;
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
     if (office === 'all' || !office) {
-      axios
-        .get(`${api_URL}/fiscalSummary`, {
-          // mock URL, can be simply replaced by `${Real_Production_URL}/summary` in prod!
-          params: {
-            from: years[0],
-            to: years[1],
-          },
-        })
+      fetchData()
         .then(result => {
-          stateSettingCallback(view, office, [result.data]); // <-- `test_data` here can be simply replaced by `result.data` in prod!
+          stateSettingCallback(view, office, [result]); // <-- `test_data` here can be simply replaced by `result.data` in prod!
         })
         .catch(err => {
           console.error(err);
         });
     } else {
-      axios
-        .get(`${api_URL}/citizenshipSummary`, {
-          // mock URL, can be simply replaced by `${Real_Production_URL}/summary` in prod!
-          params: {
-            from: years[0],
-            to: years[1],
-            office: office,
-          },
-        })
+      fetchData()
         .then(result => {
-          stateSettingCallback(view, office, [result.data]); // <-- `test_data` here can be simply replaced by `result.data` in prod!
+          stateSettingCallback(view, office, [result]); // <-- `test_data` here can be simply replaced by `result.data` in prod!
         })
         .catch(err => {
           console.error(err);
